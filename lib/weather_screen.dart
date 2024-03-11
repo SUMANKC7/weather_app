@@ -1,8 +1,10 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:weather_app/additional_information.dart';
+import 'package:weather_app/weather_forcast.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
@@ -48,7 +50,7 @@ class WeatherScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            "300.67°F",
+                            "300K",
                             style: TextStyle(
                               fontSize: 32,
                             ),
@@ -87,72 +89,60 @@ class WeatherScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            SingleChildScrollView(
+            //scroll view
+            const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                WeatherForcast(),
-               WeatherForcast(),
-                WeatherForcast(),
-                  WeatherForcast(),
-                  WeatherForcast(),
+                  WeatherForcast(time:"09:00" ,cloud: Icons.cloud,output: "320.12",),
+                  WeatherForcast(time:"12:00",cloud: Icons.cloud,output: "301.54",),
+                  WeatherForcast(time:"15:00",cloud: Icons.cloud,output: "310.84",),
+                  WeatherForcast(time:"18:00",cloud: Icons.cloud,output: "209.14",),
+                  WeatherForcast(time:"22:00",cloud: Icons.cloud,output: "332.54",),
                 ],
               ),
             ),
 
-          
             //Additional Information
             const SizedBox(
-              height: 40,
+              height: 16,
             ),
-            const Placeholder(
-              fallbackHeight: 150,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class WeatherForcast extends StatelessWidget {
-  const WeatherForcast({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-   return Card(
-      elevation: 8,
-      child: Container(
-        width: 100,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Column(
-          children: [
-            Text(
-              "09:00",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Additional Information",
+                style: TextStyle(
+                  fontSize: 29,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            SizedBox(
-              height: 8,
+            const SizedBox(
+              height: 20,
             ),
-            Icon(
-              Icons.cloud,
-              size: 32,
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              "320.12",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
+
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+
+                Additional_information(
+                  icon: Icons.water_drop,
+                  label: "Humidity",
+                  value: "94",
+                ),
+
+                Additional_information(
+                  icon: Icons.wind_power_outlined,
+                  label: "Wind Speed",
+                  value: "7.67",
+                ),
+
+                Additional_information(
+                  icon: Icons.beach_access_sharp,
+                  label: "Pressure",
+                  value: "1006",
+                ),
+              ],
             ),
           ],
         ),
