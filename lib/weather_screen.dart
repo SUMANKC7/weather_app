@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:weather_app/additional_information.dart';
 import 'package:weather_app/weather_forcast.dart';
@@ -15,6 +16,7 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  
   Future<Map<String, dynamic>> getCurrentWeather() async {
     try {
       final res = await http.get(
@@ -122,7 +124,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Weather Forcast",
+                    "Hourly Forcast",
                     style: TextStyle(
                       fontSize: 29,
                       fontWeight: FontWeight.bold,
@@ -133,36 +135,43 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   height: 16,
                 ),
                 //scroll view
-                const SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      WeatherForcast(
-                        time: "09:00",
-                        cloud: Icons.cloud,
-                        output: "320.12",
-                      ),
-                      WeatherForcast(
-                        time: "12:00",
-                        cloud: Icons.sunny,
-                        output: "301.54",
-                      ),
-                      WeatherForcast(
-                        time: "15:00",
-                        cloud: Icons.cloud,
-                        output: "310.84",
-                      ),
-                      WeatherForcast(
-                        time: "18:00",
-                        cloud: Icons.sunny_snowing,
-                        output: "209.14",
-                      ),
-                      WeatherForcast(
-                        time: "22:00",
-                        cloud: Icons.cloud,
-                        output: "332.54",
-                      ),
-                    ],
+                //  SingleChildScrollView(
+                //   scrollDirection: Axis.horizontal,
+                //   child: Row(
+                //     children: [
+                //       for(int i=0;i<5;i++)
+                //       HourlyForecastItem(
+                //        time:data["list"][i+1]["dt"].toString(),
+                //        icon:Icons.cloud,
+                //        temperature:
+                //        (data["list"][i+1]["main"]["temp"]-274.15).toStringAsFixed(2),
+                //       ),
+                //     ],
+
+                //   ),
+                // ),
+                SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                    itemCount: 5,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final hourlyForcastItem = data["list"][index + 1];
+                      final hourlySky =
+                          data["list"][index + 1]["weather"][0]["main"];
+                      final hourlyTemp =
+                          hourlyForcastItem["main"]["temp"].toString();
+
+
+                      final time = DateTime.parse(hourlyForcastItem["dt_txt"]);
+                      return WeatherForcast(
+                        time: DateFormat.j().format(time),
+                        temperature: hourlyTemp,
+                        icon: hourlySky == "Clouds" || hourlySky == "Rain"
+                            ? Icons.cloud
+                            : Icons.sunny,
+                      );
+                    },
                   ),
                 ),
 
@@ -200,7 +209,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     Additional_information(
                       icon: Icons.beach_access_sharp,
                       label: "Pressure",
-                      value:"${ currentPressure.toString()} ",
+                      value: "${currentPressure.toString()} ",
                     ),
                   ],
                 ),
